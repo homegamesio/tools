@@ -7,7 +7,7 @@ const config = require('./config');
 const runCmd = (cmd, args) => new Promise((resolve, reject) => {
 	let pwd = '';
 	let error = '';
-	
+
 	const proc = spawn(cmd, args);
 
 	proc.stdout.on('data', data => {
@@ -17,8 +17,8 @@ const runCmd = (cmd, args) => new Promise((resolve, reject) => {
 	proc.stderr.on('data', err => {
 		error = err.toString();
 	});
-	
-	proc.on('error', (error) => {
+
+	proc.on('error', (err) => {
 		error = err.toString();
 	});
 
@@ -26,6 +26,7 @@ const runCmd = (cmd, args) => new Promise((resolve, reject) => {
 		if (code == 0) {
 			resolve(pwd);
 		} else {
+			console.log(error);
 			reject(error);
 		}
 	});
@@ -73,4 +74,3 @@ dockerBuild().then(() => {
 		});
 	});
 });
-
