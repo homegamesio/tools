@@ -34,7 +34,8 @@ const runCmd = (cmd, args) => new Promise((resolve, reject) => {
 });
 
 const getECRPassword = () => new Promise((resolve, reject) => {
-	const ecrLoginCmd = ['ecr-public', 'get-login-password', '--region', config.ECR_AWS_REGION];
+	const ecrLoginCmd = ['ecr', 'get-login-password', '--region', config.ECS_AWS_REGION];
+	// aws ecr get-login-password --region us-west-2
 	runCmd('aws', ecrLoginCmd).then(resolve).catch(reject);
 });
 

@@ -12,6 +12,16 @@ const params = {
 	taskDefinition: config.TASK_DEFINITION_NAME
 };
 
+const compatibilities = [];
+
+if (config.SUPPORTS_FARGATE) {
+	compatibilities.push('FARGATE');
+}
+
+if (config.SUPPORTS_EC2) {
+	compatibilities.push('EC2');
+}
+
 const realParams = {
 	containerDefinitions: [
 		{
@@ -19,17 +29,24 @@ const realParams = {
 			image: `${config.ECR_REPO_URI}/${config.REPO_NAME}:latest`,
 			portMappings: [
 				{containerPort: '80', hostPort: '80'}
-			]
+			],
+			logConfiguration: {
+				logDriver: 'awslogs',
+				options: {
+					'awslogs-group': `/ecs/${config.ECS_SERVICE_NAME}`,
+					'awslogs-region': config.LOG_REGION,
+					'awslogs-stream-prefix': 'ecs'
+				}
+			}
 		}
 	],
 	taskRoleArn: config.ECS_TASK_ROLE_ARN,
+	executionRoleArn: config.ECS_TASK_ROLE_ARN,
 	family: config.ECS_TASK_FAMILY,
-	cpu: '512',
-	memory: '1024',
-	requiresCompatibilities: [
-		'FARGATE'
-	],
-	networkMode: 'awsvpc'
+	cpu: config.TASK_CPU,
+	memory: config.TASK_MEMORY,
+	requiresCompatibilities: compatibilities,
+	networkMode: config.TASK_NETWORK_MODE
 };
 
 ecs.registerTaskDefinition(realParams, (err, data) => {
