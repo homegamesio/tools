@@ -91,8 +91,8 @@ octokit.request('GET /repos/{owner}/{repo}/zipball/{ref}', {
                         fs.renameSync('homegames-linux', 'homegames-linux-package/homegames-linux');
                         fs.renameSync('homegames-macos', 'homegames-mac-package/homegames-macos');
 
-                        fs.chmodSync('homegames-linux-package/homegames-linux', '111');
-                        fs.chmodSync('homegames-mac-package/homegames-macos', '111');
+                        fs.chmodSync('homegames-linux-package/homegames-linux', '555');
+                        fs.chmodSync('homegames-mac-package/homegames-macos', '555');
 
                         const configPath = commitHash + '/' + files[0] + '/config.json';
                         const dictionaryPath = commitHash + '/' + files[0] + '/dictionary.txt';
